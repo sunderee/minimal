@@ -1,3 +1,9 @@
-## 0.0.1
+## 1.0.0
 
-* TODO: Describe initial release.
+* Initial release of Minimal state management package
+* Features:
+  * MVN (Model-View-Notifier) pattern
+  * Lazy initialization of notifiers
+  * Optional autodispose for notifiers
+  * State selection for optimized rebuilds
+  * Dependency injection with locator
