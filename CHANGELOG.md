@@ -1,3 +1,7 @@
+## 1.0.1
+
+* Fix logo URL in README.md
+
 ## 1.0.0
 
 * Initial release of Minimal state management package
