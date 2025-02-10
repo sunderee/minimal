@@ -1,3 +1,10 @@
+## 1.0.2
+
+* Expose a check for notifier been disposed
+* Test when notifier is accessed after disposal
+* Improve README.md
+* Improve pubspec.yaml
+
 ## 1.0.1
 
 * Fix logo URL in README.md
