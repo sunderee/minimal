@@ -2,6 +2,8 @@
   <img src="https://raw.githubusercontent.com/alesalv/minimal/main/example/assets/minimal.svg" width="100" alt="Minimal Logo">
 </p>
 
+[![Pub Version](https://img.shields.io/pub/v/minimal_mvn?label=minimal_mvn&labelColor=333940&logo=dart)](https://pub.dev/packages/minimal_mvn) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+
 # Minimal MVN
 
 A minimal state management package for Flutter. Part of a minimalistic architecture based on the MVN (Model-View-Notifier) pattern.
@@ -26,7 +28,7 @@ You can now start using Minimal's MVN pattern in your application. The quickest 
 
 The package includes a complete [example app](/example) showing two use cases:
 - The classical counter app that demonstrates basic state management. This shows off either the non disposable and the disposable notifiers.
-- A morphing widget. This shows off two views using the same notifier, autodispose, and state selection to avoid unnecessary rebuilds.
+- A chroma counter widget, which changes the counter, the background color, and the container shape. This shows off two views using the same notifier, autodispose, and state selection to avoid unnecessary rebuilds.
 
 ## Features
 
@@ -42,8 +44,8 @@ The package includes a complete [example app](/example) showing two use cases:
 
 ```dart
 @MappableClass()
-class MorphingWidgetUIState extends MMState with MorphingWidgetUIStateMappable {
-  const MorphingWidgetUIState({
+class ChromaCounterUIState extends MMState with ChromaCounterUIStateMappable {
+  const ChromaCounterUIState({
     this.backgroundColor = Colors.blue,
     this.count = 0,
   });
@@ -55,10 +57,10 @@ class MorphingWidgetUIState extends MMState with MorphingWidgetUIStateMappable {
 ### 2. Create a notifier to hold your UI state
 
 ```dart
-class MorphingWidgetNotifier extends MMNotifier<MorphingWidgetUIState> {
-  MorphingWidgetNotifier() : super(const MorphingWidgetUIState());
+class ChromaCounterNotifier extends MMNotifier<ChromaCounterUIState> {
+  ChromaCounterNotifier() : super(const ChromaCounterUIState());
 
-  void morph() => notify(
+  void nextMetamorph() => notify(
         state.copyWith(
           backgroundColor: _randomColor(),
           count: state.count + 1,
@@ -70,7 +72,7 @@ class MorphingWidgetNotifier extends MMNotifier<MorphingWidgetUIState> {
 ### 3. Rebuild the UI when state changes
 
 ```dart
-final notifier = morphingWidgetManager.notifier;
+final notifier = chromaCounterManager.notifier;
 return ListenableBuilder(
   listenable: notifier,
   builder: (context, _) => Container(
@@ -83,7 +85,7 @@ return ListenableBuilder(
 #### 3.2 (Optimized) Rebuild the UI only when part of the state changes
 
 ```dart
-final notifier = morphingWidgetManager.notifier;
+final notifier = chromaCounterManager.notifier;
 return ListenableBuilder(
   listenable: notifier.select((state) => state.backgroundColor),
   builder: (context, _) => Container(
@@ -96,6 +98,31 @@ return ListenableBuilder(
 
 ```dart
 FloatingActionButton(
-  onPressed: () => morphingWidgetManager.notifier.morph(),
+  onPressed: () => chromaCounterManager.notifier.nextMetamorph(),
 );
 ```
+
+## Testing
+
+### Widget Testing
+
+In tests, you can override the notifier with a mock notifier through the minimal manager:
+
+```dart
+testWidgets('should update UI when state changes', (tester) async {
+  // Use the minimal manager to override the notifier
+  counterManager.override(MockCounterNotifier.new);
+
+  await tester.pumpWidget(const MaterialApp(home: ChromaCounter()));
+
+  // Change state through the mock notifier
+  chromaCounterManager.notifier.nextMetamorph();
+  await tester.pump();
+
+  final newColor = _getContainerColor(tester);
+  // Test the exact color instead of a random one
+  expect(newColor, equals(Colors.red));
+});
+```
+
+See the [example app tests](/example/test) for more testing examples.

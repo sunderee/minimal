@@ -1,3 +1,10 @@
+## 1.0.3
+
+* Add pub and license badges to README.md
+* Rename morphing example to chroma counter
+* Add override() method to MMManager for testing purposes
+* Add test for chroma counter widget using mocked notifier
+
 ## 1.0.2
 
 * Expose a check for notifier been disposed
