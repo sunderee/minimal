@@ -82,6 +82,18 @@ class HomePage extends StatelessWidget {
                     unawaited(
                       Navigator.of(context).push(
                         MaterialPageRoute(
+                          builder: (final context) => const ChromaCounterPage(),
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text('Chroma Counter (BLoC)'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    unawaited(
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
                           builder: (final context) => const TodosPage(),
                         ),
                       ),
